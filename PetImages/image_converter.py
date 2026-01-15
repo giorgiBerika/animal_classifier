@@ -6,22 +6,20 @@ def convert_to_jpg(input_dir, output_dir):
     Convert all images from input_dir to JPG and save in output_dir
     
     Args:
-        input_dir: Folder with original images (test/)
-        output_dir: Folder to save converted JPGs (Parrot_new/)
+        input_dir: Folder with original images (Parrot_old/) -> Not exiting anymore !!
+        output_dir: Folder to save converted JPGs (Parrot/)
     """
     
     # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
     
-    print(f"\n{'='*60}")
-    print(f"Converting images to JPG")
-    print(f"{'='*60}")
+    
     print(f"Input:  {input_dir}")
     print(f"Output: {output_dir}")
     
     # Check if input directory exists
     if not os.path.exists(input_dir):
-        print(f"❌ ERROR: Input directory does not exist!")
+        print(f"Input directory does not exist!")
         return
     
     # Get all files
@@ -62,40 +60,30 @@ def convert_to_jpg(input_dir, output_dir):
             
             if ext == '.jpg':
                 already_jpg += 1
-                print(f"  [{i}/{len(files)}] ✓ Copied: {filename}")
+                print(f"  [{i}/{len(files)}]  Copied: {filename}")
             else:
                 converted += 1
-                print(f"  [{i}/{len(files)}] ✓ Converted: {filename} → {new_filename}")
+                print(f"  [{i}/{len(files)}]  Converted: {filename} - {new_filename}")
             
         except Exception as e:
             errors += 1
-            print(f"  [{i}/{len(files)}] ✗ Error: {filename} - {str(e)}")
+            print(f"  [{i}/{len(files)}]  Error: {filename} - {str(e)}")
     
     # Summary
-    print(f"\n{'='*60}")
-    print(f"CONVERSION SUMMARY")
-    print(f"{'='*60}")
-    print(f"  Total files: {len(files)}")
-    print(f"  ✓ Already JPG (copied): {already_jpg}")
-    print(f"  ✓ Converted to JPG: {converted}")
-    print(f"  ✗ Errors: {errors}")
-    print(f"  → Total JPG images saved: {already_jpg + converted}")
-    print(f"{'='*60}\n")
+    
+    print(f"   Errors: {errors}")
+    print(f"   Total JPG images saved: {already_jpg + converted}")
 
 
-# ============================================
-# MAIN EXECUTION
-# ============================================
+
 
 # Get the directory where this script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Define paths
-input_dir = os.path.join(script_dir, 'Parrot')      # Input: PetImages/test/
-output_dir = os.path.join(script_dir, 'Parrot_new')  # Output: PetImages/Parrot_new/
+input_dir = os.path.join(script_dir, 'Parrot_old')      # Input: PetImages/parrot_old/
+output_dir = os.path.join(script_dir, 'Parrot')  # Output: PetImages/Parrot/
 
-# Run conversion
+# Run 
 convert_to_jpg(input_dir, output_dir)
 
-print("✓ Conversion complete!")
-print(f"Converted images saved to: {output_dir}")
