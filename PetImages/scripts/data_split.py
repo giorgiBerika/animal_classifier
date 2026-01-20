@@ -34,6 +34,49 @@ def split_train_val_test(source_dir, output_dir, train_ratio=0.7, val_ratio=0.15
 
     print(f"\nOutput directory: {output_dir}/")
 
+    print("\nStarting processing - ")
 
+    total_stats = {'train': 0, 'val': 0, 'test': 0}
+
+    for class_name in classes:
+        print(f"Class: ", {class_name})
+
+        class_dir = os.path.join(source_dir, class_name)
+        images = [f for f in os.listdir(class_dir)
+                  if f.lower().endswith('.jpg')]
+        
+        total_images = len(images)
+        print(f"All Images: {total_images}")
+
+        # we shuffly all the images randomly
+        random.shuffle(images)
+
+        train_end = int(total_images * train_ratio)
+        val_end = train_end + int(total_images * val_ratio )
+
+        # Splitting images 
+        train_images = images[:train_end]
+        val_images = images[train_end:val_end]
+        test_images = images[val_end:]
+
+        print(f" -> Train: {len(train_images)} ")
+        print(f" -> Val: {len(val_images)} ")
+        print(f" -> Test: {len(test_images)} ")
+
+        # Copy all the images to folders
+
+        for split_name, image_list in [('train', train_images),
+                                       ('val', val_images),
+                                       ('test', test_images)]:
+            for image_name in image_list:
+                src = os.path.join(class_dir, image_name)
+                dst = os.path.join(output_dir, split_name, class_name, image_name)
+                shutil.copy2(src, dst)
+
+            total_stats[split_name] += len(image_list)
+        print()
     
+    return total_stats
+
+
 split_train_val_test("PetImages/resized", "PetImages/splitted")
